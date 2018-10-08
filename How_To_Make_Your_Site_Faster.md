@@ -19,12 +19,12 @@
 	- familar with language programing of this source
 
 ## Content
+
 ### Database
 	- Basicaly mysql or orther database system will support the shortest path to find out your data necessary.
 	- However, not always mysql has find out the shortest path, must need support from developer and add index is a way.
 #### Mysql query tuning
 	- How to add indices is good?
-
 		- Mysql use B-Tree to save index (Storage engine is InnoDB)
 		- ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
 
@@ -35,7 +35,6 @@
 			- In order to support range query, It has the pointer between the leaf (instead of the conventional from parent to children).
 
 	- Order for add index is very important!
-
 		- ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
 		- Example:
 			```sql
