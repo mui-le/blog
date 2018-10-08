@@ -135,79 +135,80 @@
         - Load balancing
 
 #### Remove the limitation in kernel stack
-    - To be able to make good use of nginx. we need remove default configuration unnecessary(of course if you know how to nginx configuration :D)
-    - /etc/sysctl.conf
-        - net.core.somaxconn : 
-        - net.ipv4.ip_local_port_range
-        - sys.fs.file_max
-        - net.ipv4.tcp_wmem & net.ipv4.tcp_rmem
-        - Recommend:
-            ```nginx
-                net.ipv4.ip_local_port_range='1024 65000'
-                net.ipv4.tcp_tw_reuse='1'
-                net.ipv4.tcp_fin_timeout='15'
-                net.core.netdev_max_backlog='4096'
-                net.core.rmem_max='16777216'
-                net.core.somaxconn='4096'
-                net.core.wmem_max='16777216'
-                net.ipv4.tcp_max_syn_backlog='20480'
-                net.ipv4.tcp_max_tw_buckets='400000'
-                net.ipv4.tcp_no_metrics_save='1'
-                net.ipv4.tcp_rmem='4096 87380 16777216'
-                net.ipv4.tcp_syn_retries='2'
-                net.ipv4.tcp_synack_retries='2'
-                net.ipv4.tcp_wmem='4096 65536 16777216'
-                vm.min_free_kbytes='65536'
-            ```
+
+- To be able to make good use of nginx. we need remove default configuration unnecessary(of course if you know how to nginx configuration :D)
+- /etc/sysctl.conf
+    - net.core.somaxconn : 
+    - net.ipv4.ip_local_port_range
+    - sys.fs.file_max
+    - net.ipv4.tcp_wmem & net.ipv4.tcp_rmem
+    - Recommend:
+        ```nginx
+            net.ipv4.ip_local_port_range='1024 65000'
+            net.ipv4.tcp_tw_reuse='1'
+            net.ipv4.tcp_fin_timeout='15'
+            net.core.netdev_max_backlog='4096'
+            net.core.rmem_max='16777216'
+            net.core.somaxconn='4096'
+            net.core.wmem_max='16777216'
+            net.ipv4.tcp_max_syn_backlog='20480'
+            net.ipv4.tcp_max_tw_buckets='400000'
+            net.ipv4.tcp_no_metrics_save='1'
+            net.ipv4.tcp_rmem='4096 87380 16777216'
+            net.ipv4.tcp_syn_retries='2'
+            net.ipv4.tcp_synack_retries='2'
+            net.ipv4.tcp_wmem='4096 65536 16777216'
+            vm.min_free_kbytes='65536'
+        ```
 
 
 #### Log nginx to find out bottle neck
-    - Have simple tool use be to do that:
-    - [https://github.com/matsuu/kataribe](https://github.com/matsuu/kataribe)
-    - you need setting nginx log format use directive
-        ```log
-        log_format with_time '$remote_addr - $remote_user [$time_local] '
-                     '"$request" $status $body_bytes_sent '
-                     '"$http_referer" "$http_user_agent" $request_time';
-        access_log /var/log/nginx/access.log with_time;
-        ```
+- Have simple tool use be to do that:
+- [https://github.com/matsuu/kataribe](https://github.com/matsuu/kataribe)
+- you need setting nginx log format use directive
+    ```log
+    log_format with_time '$remote_addr - $remote_user [$time_local] '
+                 '"$request" $status $body_bytes_sent '
+                 '"$http_referer" "$http_user_agent" $request_time';
+    access_log /var/log/nginx/access.log with_time;
+    ```
 
 #### Caching with nginx
-    - Nginx when use server static file, notice the setting about cache, compression. setting use gzip for static file is important
-    - use gzip reduce cost relate IO, and though. Setting cache control will help server don't request static file loaded until cache expire.
-        ```conf
-        http {
-        gzip              on;
-        gzip_http_version 1.0;
-        gzip_types        text/plain
-                          text/html
-                          text/xml
-                          text/css
-                          application/xml
-                          application/xhtml+xml
-                          application/rss+xml
-                          application/atom_xml
-                          application/javascript
-                          application/x-javascript
-                          application/x-httpd-php;
-        gzip_disable      "MSIE [1-6]\.";
-        gzip_disable      "Mozilla/4";
-        gzip_comp_level   1;
-        gzip_proxied      any;
-        gzip_vary         on;
-        gzip_buffers      4 8k;
-        gzip_min_length   1100;
+- Nginx when use server static file, notice the setting about cache, compression. setting use gzip for static file is important
+- use gzip reduce cost relate IO, and though. Setting cache control will help server don't request static file loaded until cache expire.
+    ```conf
+    http {
+    gzip              on;
+    gzip_http_version 1.0;
+    gzip_types        text/plain
+                      text/html
+                      text/xml
+                      text/css
+                      application/xml
+                      application/xhtml+xml
+                      application/rss+xml
+                      application/atom_xml
+                      application/javascript
+                      application/x-javascript
+                      application/x-httpd-php;
+    gzip_disable      "MSIE [1-6]\.";
+    gzip_disable      "Mozilla/4";
+    gzip_comp_level   1;
+    gzip_proxied      any;
+    gzip_vary         on;
+    gzip_buffers      4 8k;
+    gzip_min_length   1100;
         ```
 
 #### Advance nginx
-    - use keepalive: keep alive is a technique of http to `keep` connection TCP even HTTP connection session is over, in order to reuse next request. This Technique very helpful when an use have a lot request to get static resource
-    - ![keepalive](https://github.com/mui-le/blog/blob/master/nginx_advance.jpg)
-    - add directive keepalive to upstream section
-        ```
-        upstream app {
-            server 127.0.0.1:5000;
-            keepalive 16;
-        }
+- use keepalive: keep alive is a technique of http to `keep` connection TCP even HTTP connection session is over, in order to reuse next request. This Technique very helpful when an use have a lot request to get static resource
+- ![keepalive](https://github.com/mui-le/blog/blob/master/nginx_advance.jpg)
+- add directive keepalive to upstream section
+    ```
+    upstream app {
+        server 127.0.0.1:5000;
+        keepalive 16;
+    }
 
     
 
