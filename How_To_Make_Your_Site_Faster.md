@@ -3,9 +3,7 @@
 ## About
 	- This page have a purpose to discussion about an issue probably helpful with everyone are web developer
 	- I don't teach, no bet on it about anything or something
-
----
-
+	
 ## Situation
 	- Will be hosted on a website that has a source code.
 	- Your work in limited time and must tune that site achieves the highest thoughput
@@ -13,15 +11,12 @@
 	- However It must ensure:
 		1. Test of benchmark to rate point is correction
 		2. Not change spec of host(Ram or CPU)
----
 
 ## 3 Technical skill
 	- Knowledge about website running, the stack, how about website run.
 	- Devops, tuning middleware layer integrate to be used nginx, mysql...
 	- Using tool to benchmarking, detect bottleneck
 	- familar with language programing of this source
----
-
 
 ## Content
 ### Database
@@ -29,8 +24,6 @@
 	- However, not always mysql has find out the shortest path, must need support from developer and add index is a way.
 #### Mysql query tuning
 	- How to add indices is good?
-
-	---
 
 		- Mysql use B-Tree to save index (Storage engine is InnoDB)
 		- ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
@@ -42,8 +35,6 @@
 			- In order to support range query, It has the pointer between the leaf (instead of the conventional from parent to children).
 
 	- Order for add index is very important!
-
-	---
 
 		- ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
 		- Example:
@@ -94,9 +85,6 @@
 			- MySQL could read the entire table using idx_lf and then do the filtering after the order by. I don't think this is an optimization option in practice (for MySQL), but that can happen in other databases.
 
 	- How about index will be affected with `OR` query?
-
-	---
-
 		- With `AND` query maybe everthing is pretty straight forward. But things are not so easy with `OR` query
 			```sql
 				SELECT * FROM tbl_name WHERE key1 = 10 OR key2 = 20;
@@ -108,9 +96,6 @@
 		- [Document to reference](https://dev.mysql.com/doc/refman/5.7/en/index-merge-optimization.html) 
 
 	- Covering index
-
-	---
-
 		- Covering index is type special of index. It contains all the data always needs to search
 		- So we try to select the data that these index keys on where clause
 			```sql
@@ -119,9 +104,6 @@
 		- [Document reference](https://planet.mysql.com/entry/?id=661727)
 
 	- Query function
-
-	---
-
 		- Let's careful with query function because mysql maybe not understand your query to use indexes
 		- Example:
 			```sql
@@ -133,23 +115,14 @@
 			```
 
 	- Should be use auto increment for primary key
-
-	---
-
 		- In other word, we can see insert into between sorted data-structure và non-sorted data-structure
 		- of course, non-sorted data-structure will faster
 
 	- Null or not null
-
-	---
-
 		- Mysql  support for null value, that meant exist state data non value.
 		- So we shouldn't use null value for all field
 
 	- Config buffer pool
-
-	---
-
 		- InnoDB use the memory is `buffer pool` for cache data & save index, this memory save by unit is `page` has volumn (default 16kb) and use LRU algorithm to evict cache.
 		- Documents:
 			- [The InnoDB Buffer Pool](https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html)
