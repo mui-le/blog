@@ -128,11 +128,11 @@
         - [how large should be mysql innodb](https://dba.stackexchange.com/questions/27328/how-large-should-be-mysql-innodb-buffer-pool-size)
         - [glossary](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_page_size)
 ### System
-    - I choose nginx for webserver (same Ito-san in confluence tech of him)
-    - You can say some helpful of nginx:
-        - Reverse proxy
-        - Deliver static file (as css/js/image)
-        - Load balancing
+- I choose nginx for webserver (same Ito-san in confluence tech of him)
+- You can say some helpful of nginx:
+    - Reverse proxy
+    - Deliver static file (as css/js/image)
+    - Load balancing
 
 #### Remove the limitation in kernel stack
 
