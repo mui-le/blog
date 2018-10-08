@@ -1,10 +1,13 @@
 # How To Make Your Website Faster
+======
 
 ## About
+======
 	- This page have a purpose to discussion about an issue probably helpful with everyone are web developer
 	- I don't teach, no bet on it about anything or something
 	
 ## Situation
+======
 	- Will be hosted on a website that has a source code.
 	- Your work in limited time and must tune that site achieves the highest thoughput
 	- You can use any ways e.g change structure database, paste index, add middleware, refartoring logic of application...
@@ -12,18 +15,22 @@
 		1. Test of benchmark to rate point is correction
 		2. Not change spec of host(Ram or CPU)
 
-## 3 Technical skill
+## Technical skill
+======
 	- Knowledge about website running, the stack, how about website run.
 	- Devops, tuning middleware layer integrate to be used nginx, mysql...
 	- Using tool to benchmarking, detect bottleneck
 	- familar with language programing of this source
 
 ## Content
+======
 
 ### Database
+======
 	- Basicaly mysql or orther database system will support the shortest path to find out your data necessary.
 	- However, not always mysql has find out the shortest path, must need support from developer and add index is a way.
 #### Mysql query tuning
+======
 	- How to add indices is good?
 		- Mysql use B-Tree to save index (Storage engine is InnoDB)
 		- ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
@@ -128,6 +135,7 @@
 			- [how large should be mysql innodb](https://dba.stackexchange.com/questions/27328/how-large-should-be-mysql-innodb-buffer-pool-size)
 			- [glossary](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_page_size)
 ### System
+======
 	- I choose nginx for webserver (same Ito-san in confluence tech of him)
 	- You can say some helpful of nginx:
 		- Reverse proxy
@@ -135,6 +143,7 @@
 		- Load balancing
 
 #### Remove the limitation in kernel stack
+======
 	- To be able to make good use of nginx. we need remove default configuration unnecessary(of course if you know how to nginx configuration :D)
 	- /etc/sysctl.conf
 		- net.core.somaxconn : 
@@ -162,6 +171,7 @@
 
 
 #### Log nginx to find out bottle neck
+======
 	- Have simple tool use be to do that:
 	- [https://github.com/matsuu/kataribe](https://github.com/matsuu/kataribe)
 	- you need setting nginx log format use directive
@@ -173,6 +183,7 @@
     	```
 
 #### Caching with nginx
+======
 	- Nginx when use server static file, notice the setting about cache, compression. setting use gzip for static file is important
 	- use gzip reduce cost relate IO, and though. Setting cache control will help server don't request static file loaded until cache expire.
 		```conf
@@ -200,6 +211,7 @@
 	    ```
 
 #### Advance nginx
+======
 	- use keepalive: keep alive is a technique of http to `keep` connection TCP even HTTP connection session is over, in order to reuse next request. This Technique very helpful when an use have a lot request to get static resource
 	- ![keepalive](https://github.com/mui-le/blog/blob/master/nginx_advance.jpg)
 	- add directive keepalive to upstream section
