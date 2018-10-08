@@ -1,56 +1,51 @@
 # How To Make Your Website Faster
-======
+
 
 ## About
-------
-	- This page have a purpose to discussion about an issue probably helpful with everyone are web developer
-	- I don't teach, no bet on it about anything or something
+
+- This page have a purpose to discussion about an issue probably helpful with everyone are web developer
+- I don't teach, no bet on it about anything or something
 	
 ## Situation
-------
-	- Will be hosted on a website that has a source code.
-	- Your work in limited time and must tune that site achieves the highest thoughput
-	- You can use any ways e.g change structure database, paste index, add middleware, refartoring logic of application...
-	- However It must ensure:
-		1. Test of benchmark to rate point is correction
-		2. Not change spec of host(Ram or CPU)
+- Will be hosted on a website that has a source code.
+- Your work in limited time and must tune that site achieves the highest thoughput
+- You can use any ways e.g change structure database, paste index, add middleware, refartoring logic of application...
+- However It must ensure:
+1. Test of benchmark to rate point is correction
+2. Not change spec of host(Ram or CPU)
 
 ## Technical skill
-------
-	- Knowledge about website running, the stack, how about website run.
-	- Devops, tuning middleware layer integrate to be used nginx, mysql...
-	- Using tool to benchmarking, detect bottleneck
-	- familar with language programing of this source
+- Knowledge about website running, the stack, how about website run.
+- Devops, tuning middleware layer integrate to be used nginx, mysql...
+- Using tool to benchmarking, detect bottleneck
+- familar with language programing of this source
 
 ## Content
-------
 
 ### Database
-	- Basicaly mysql or orther database system will support the shortest path to find out your data necessary.
-	- However, not always mysql has find out the shortest path, must need support from developer and add index is a way.
+- Basicaly mysql or orther database system will support the shortest path to find out your data necessary.
+- However, not always mysql has find out the shortest path, must need support from developer and add index is a way.
 #### Mysql query tuning
-	- How to add indices is good?
-		- Mysql use B-Tree to save index (Storage engine is InnoDB)
-		- ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
+- How to add indices is good?
+- Mysql use B-Tree to save index (Storage engine is InnoDB)
+- ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
+    - If you don't know, you only know the point below:
+	- It's tree
+	- It's support range query
+	- In order to support range query, It has the pointer between the leaf (instead of the conventional from parent to children).
 
-		- If you don't know, you only know the point below:
-
-			- It's tree
-			- It's support range query
-			- In order to support range query, It has the pointer between the leaf (instead of the conventional from parent to children).
-
-	- Order for add index is very important!
-		- ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
-		- Example:
-			```sql
-			SELECT name, gender Quang FROM dig WHERE name = 'Diep' AND age = '30' AND language = 'japan' 
-			```
-			~~for example above, we need add an index cover for 3 fields to support mysql find quickly your data~~ 
-			```sql
-			ALTER TABLE dig ADD INDEX idx_name_age_language(name, age, language)
-			```
-			~~However multicolumn index will work when query select reverse or forward order with index inited, what happend when we change order of query~~
-			```sql
+  - Order for add index is very important!
+  - ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
+  - Example:
+	```sql
+	SELECT name, gender Quang FROM dig WHERE name = 'Diep' AND age = '30' AND language = 'japan' 
+	```
+	~~for example above, we need add an index cover for 3 fields to support mysql find quickly your data~~ 
+	```sql
+	ALTER TABLE dig ADD INDEX idx_name_age_language(name, age, language)
+	```
+	~~However multicolumn index will work when query select reverse or forward order with index inited, what happend when we change order of query~~
+	```sql
 				SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
 			```
 			~~Mysql will don't know need reorder query and use `idx_name_age_language` to find. So you will need re-init index alert:
