@@ -94,39 +94,39 @@
     - Mysql Has support index merge for this case So we could add an index for field1, an index for field2....an index for fieldm. Mysql will support them merge them, the first it will be find whose record relate index of field1, after that will be find the index relate of field2...then merge result of them.
     - [Document to reference](https://dev.mysql.com/doc/refman/5.7/en/index-merge-optimization.html) 
 
-    - Covering index
-        - Covering index is type special of index. It contains all the data always needs to search
-        - So we try to select the data that these index keys on where clause
-            ```sql
-            SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
-            ```
-        - [Document reference](https://planet.mysql.com/entry/?id=661727)
+- Covering index
+    - Covering index is type special of index. It contains all the data always needs to search
+    - So we try to select the data that these index keys on where clause
+        ```sql
+        SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
+        ```
+    - [Document reference](https://planet.mysql.com/entry/?id=661727)
 
-    - Query function
-        - Let's careful with query function because mysql maybe not understand your query to use indexes
-        - Example:
-            ```sql
-                SELECT field FROM table WHERE field1 + 1 = 5
-            ```
-            Index not work because mysql not enough smart to know that
-            ```sql
-                SELECT field FROM table WHERE field = 4
-            ```
+- Query function
+    - Let's careful with query function because mysql maybe not understand your query to use indexes
+    - Example:
+        ```sql
+            SELECT field FROM table WHERE field1 + 1 = 5
+        ```
+        Index not work because mysql not enough smart to know that
+        ```sql
+            SELECT field FROM table WHERE field = 4
+        ```
 
-    - Should be use auto increment for primary key
-        - In other word, we can see insert into between sorted data-structure và non-sorted data-structure
-        - of course, non-sorted data-structure will faster
+- Should be use auto increment for primary key
+    - In other word, we can see insert into between sorted data-structure và non-sorted data-structure
+    - of course, non-sorted data-structure will faster
 
-    - Null or not null
-        - Mysql  support for null value, that meant exist state data non value.
-        - So we shouldn't use null value for all field
+- Null or not null
+    - Mysql  support for null value, that meant exist state data non value.
+    - So we shouldn't use null value for all field
 
-    - Config buffer pool
-        - InnoDB use the memory is `buffer pool` for cache data & save index, this memory save by unit is `page` has volumn (default 16kb) and use LRU algorithm to evict cache.
-        - Documents:
-            - [The InnoDB Buffer Pool](https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html)
-            - [how large should be mysql innodb](https://dba.stackexchange.com/questions/27328/how-large-should-be-mysql-innodb-buffer-pool-size)
-            - [glossary](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_page_size)
+- Config buffer pool
+    - InnoDB use the memory is `buffer pool` for cache data & save index, this memory save by unit is `page` has volumn (default 16kb) and use LRU algorithm to evict cache.
+    - Documents:
+        - [The InnoDB Buffer Pool](https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html)
+        - [how large should be mysql innodb](https://dba.stackexchange.com/questions/27328/how-large-should-be-mysql-innodb-buffer-pool-size)
+        - [glossary](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_page_size)
 ### System
     - I choose nginx for webserver (same Ito-san in confluence tech of him)
     - You can say some helpful of nginx:
