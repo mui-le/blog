@@ -29,14 +29,14 @@
 - How to add indices is good?
 - Mysql use B-Tree to save index (Storage engine is InnoDB)
 - ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
-    - If you don't know, you only know the point below:
-        - It's tree
-        - It's support range query
-        - In order to support range query, It has the pointer between the leaf (instead of the conventional from parent to children).
+- If you don't know, you only know the point below:
+    - It's tree
+    - It's support range query
+    - In order to support range query, It has the pointer between the leaf (instead of the conventional from parent to children).
 
-  - Order for add index is very important!
-  - ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
-  - Example:
+- Order for add index is very important!
+- ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
+- Example:
     ```sql
     SELECT name, gender Quang FROM dig WHERE name = 'Diep' AND age = '30' AND language = 'japan' 
     ```
@@ -46,53 +46,53 @@
     ```
     ~~However multicolumn index will work when query select reverse or forward order with index inited, what happend when we change order of query~~
     ```sql
-                SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
-            ```
-            ~~Mysql will don't know need reorder query and use `idx_name_age_language` to find. So you will need re-init index alert:
-            ```sql
-                ALTER TABLE dig ADD INDEX idx_name_language_age(name, language, age)
-            ```
-        * Note: the knowledge above is no longer true because mysql has support for now [index-condition-pushdown-optimization](https://dev.mysql.com/doc/refman/5.6/en/index-condition-pushdown-optimization.html)
-        - Order of index will most likely be affected by the command `LIKE`. You can reference [multiple-column-indexes](https://dev.mysql.com/doc/refman/5.7/en/multiple-column-indexes.html)
-            - Consider the two indexes:
-            ```sql
-                create index idx_lf on name(last_name, first_name);
-                create index idx_fl on name(first_name, last_name);
-            ```
-            - Both of these should work equally well on:
-            ```sql
-                where last_name = XXX and first_name = YYY
-            ```
-            - idx_lf will be optimal for the following conditions:
-            ```sql
-                where last_name = XXX
-                where last_name like 'X%'
-                where last_name = XXX and first_name like 'Y%'
-                where last_name = XXX order by first_name
-            ```
-            - idx_fl will be optimal for the following:
-            ```sql
-                where first_name = YYY
-                where first_name like 'Y%'
-                where first_name = YYY and last_name like 'X%'
-                where first_name = XXX order by last_name
-            ```
-            - For many of these cases, both indexes could possibly be used, but one is optimal. For instance, consider idx_lf with the query:
-            ```sql
-                where first_name = XXX order by last_name
-            ```
-            - MySQL could read the entire table using idx_lf and then do the filtering after the order by. I don't think this is an optimization option in practice (for MySQL), but that can happen in other databases.
+        SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
+    ```
+    ~~Mysql will don't know need reorder query and use `idx_name_age_language` to find. So you will need re-init index alert:
+    ```sql
+        ALTER TABLE dig ADD INDEX idx_name_language_age(name, language, age)
+    ```
+* Note: the knowledge above is no longer true because mysql has support for now [index-condition-pushdown-optimization](https://dev.mysql.com/doc/refman/5.6/en/index-condition-pushdown-optimization.html)
+- Order of index will most likely be affected by the command `LIKE`. You can reference [multiple-column-indexes](https://dev.mysql.com/doc/refman/5.7/en/multiple-column-indexes.html)
+    - Consider the two indexes:
+    ```sql
+        create index idx_lf on name(last_name, first_name);
+        create index idx_fl on name(first_name, last_name);
+    ```
+    - Both of these should work equally well on:
+    ```sql
+        where last_name = XXX and first_name = YYY
+    ```
+    - idx_lf will be optimal for the following conditions:
+    ```sql
+        where last_name = XXX
+        where last_name like 'X%'
+        where last_name = XXX and first_name like 'Y%'
+        where last_name = XXX order by first_name
+    ```
+    - idx_fl will be optimal for the following:
+    ```sql
+        where first_name = YYY
+        where first_name like 'Y%'
+        where first_name = YYY and last_name like 'X%'
+        where first_name = XXX order by last_name
+    ```
+    - For many of these cases, both indexes could possibly be used, but one is optimal. For instance, consider idx_lf with the query:
+    ```sql
+        where first_name = XXX order by last_name
+    ```
+    - MySQL could read the entire table using idx_lf and then do the filtering after the order by. I don't think this is an optimization option in practice (for MySQL), but that can happen in other databases.
 
-    - How about index will be affected with `OR` query?
-        - With `AND` query maybe everthing is pretty straight forward. But things are not so easy with `OR` query
-            ```sql
-                SELECT * FROM tbl_name WHERE key1 = 10 OR key2 = 20;
-            ```
-        - The other biggest betwwen `AND` query with `OR` query. that with `AND` query you can use `multi column index` but `OR` is not. Why?
-        - The reason for above that is you need information index of field1, field2... But Do not need the in the same time because it's `OR` condition. So what is you solution in this case?
+- How about index will be affected with `OR` query?
+    - With `AND` query maybe everthing is pretty straight forward. But things are not so easy with `OR` query
+        ```sql
+            SELECT * FROM tbl_name WHERE key1 = 10 OR key2 = 20;
+        ```
+    - The other biggest betwwen `AND` query with `OR` query. that with `AND` query you can use `multi column index` but `OR` is not. Why?
+    - The reason for above that is you need information index of field1, field2... But Do not need the in the same time because it's `OR` condition. So what is you solution in this case?
 
-        - Mysql Has support index merge for this case So we could add an index for field1, an index for field2....an index for fieldm. Mysql will support them merge them, the first it will be find whose record relate index of field1, after that will be find the index relate of field2...then merge result of them.
-        - [Document to reference](https://dev.mysql.com/doc/refman/5.7/en/index-merge-optimization.html) 
+    - Mysql Has support index merge for this case So we could add an index for field1, an index for field2....an index for fieldm. Mysql will support them merge them, the first it will be find whose record relate index of field1, after that will be find the index relate of field2...then merge result of them.
+    - [Document to reference](https://dev.mysql.com/doc/refman/5.7/en/index-merge-optimization.html) 
 
     - Covering index
         - Covering index is type special of index. It contains all the data always needs to search
@@ -128,7 +128,6 @@
             - [how large should be mysql innodb](https://dba.stackexchange.com/questions/27328/how-large-should-be-mysql-innodb-buffer-pool-size)
             - [glossary](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_page_size)
 ### System
-======
     - I choose nginx for webserver (same Ito-san in confluence tech of him)
     - You can say some helpful of nginx:
         - Reverse proxy
@@ -136,7 +135,6 @@
         - Load balancing
 
 #### Remove the limitation in kernel stack
-======
     - To be able to make good use of nginx. we need remove default configuration unnecessary(of course if you know how to nginx configuration :D)
     - /etc/sysctl.conf
         - net.core.somaxconn : 
@@ -164,7 +162,6 @@
 
 
 #### Log nginx to find out bottle neck
-======
     - Have simple tool use be to do that:
     - [https://github.com/matsuu/kataribe](https://github.com/matsuu/kataribe)
     - you need setting nginx log format use directive
@@ -176,7 +173,6 @@
         ```
 
 #### Caching with nginx
-======
     - Nginx when use server static file, notice the setting about cache, compression. setting use gzip for static file is important
     - use gzip reduce cost relate IO, and though. Setting cache control will help server don't request static file loaded until cache expire.
         ```conf
@@ -204,7 +200,6 @@
         ```
 
 #### Advance nginx
-======
     - use keepalive: keep alive is a technique of http to `keep` connection TCP even HTTP connection session is over, in order to reuse next request. This Technique very helpful when an use have a lot request to get static resource
     - ![keepalive](https://github.com/mui-le/blog/blob/master/nginx_advance.jpg)
     - add directive keepalive to upstream section
