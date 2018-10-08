@@ -2,12 +2,12 @@
 ======
 
 ## About
-======
+------
 	- This page have a purpose to discussion about an issue probably helpful with everyone are web developer
 	- I don't teach, no bet on it about anything or something
 	
 ## Situation
-======
+------
 	- Will be hosted on a website that has a source code.
 	- Your work in limited time and must tune that site achieves the highest thoughput
 	- You can use any ways e.g change structure database, paste index, add middleware, refartoring logic of application...
@@ -16,21 +16,19 @@
 		2. Not change spec of host(Ram or CPU)
 
 ## Technical skill
-======
+------
 	- Knowledge about website running, the stack, how about website run.
 	- Devops, tuning middleware layer integrate to be used nginx, mysql...
 	- Using tool to benchmarking, detect bottleneck
 	- familar with language programing of this source
 
 ## Content
-======
+------
 
 ### Database
-======
 	- Basicaly mysql or orther database system will support the shortest path to find out your data necessary.
 	- However, not always mysql has find out the shortest path, must need support from developer and add index is a way.
 #### Mysql query tuning
-======
 	- How to add indices is good?
 		- Mysql use B-Tree to save index (Storage engine is InnoDB)
 		- ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
