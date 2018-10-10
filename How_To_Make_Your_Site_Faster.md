@@ -46,7 +46,7 @@
     ```
     ~~However multicolumn index will work when query select reverse or forward order with index inited, what happend when we change order of query~~
     ```sql
-        SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
+        SELECT name, language FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
     ```
     ~~Mysql will don't know need reorder query and use `idx_name_age_language` to find. So you will need re-init index alert~~:
     ```sql
@@ -98,7 +98,7 @@
     - Covering index is type special of index. It contains all the data always needs to search
     - So we try to select the data that these index keys on where clause
         ```sql
-        SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
+        SELECT name, language FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
         ```
     - [Document reference](https://planet.mysql.com/entry/?id=661727)
 
@@ -106,7 +106,7 @@
     - Let's careful with query function because mysql maybe not understand your query to use indexes
     - Example:
         ```sql
-            SELECT field FROM table WHERE field1 + 1 = 5
+            SELECT field FROM table WHERE field + 1 = 5
         ```
         Index not work because mysql not enough smart to know that
         ```sql
@@ -138,10 +138,10 @@
 
 - To be able to make good use of nginx. we need remove default configuration unnecessary(of course if you know how to nginx configuration :D)
 - /etc/sysctl.conf
-    - net.core.somaxconn : 
-    - net.ipv4.ip_local_port_range
-    - sys.fs.file_max
-    - net.ipv4.tcp_wmem & net.ipv4.tcp_rmem
+    - net.core.somaxconn : the number connection max that nginx queue(buffering) before execute. as more access -> nginx not dealt with promptly and buffer to queue
+    - net.ipv4.ip_local_port_range : use nginx as reverse proxy, every connection to proxy ephemeral ports, as more access -> ports is over -> blocking. So increment this point will lead connection to upstream more than. reduce block! 
+    - sys.fs.file_max : the files descriptor max  that linux server maybe use(usually see if you worked with socket) 
+    - net.ipv4.tcp_wmem & net.ipv4.tcp_rmem : the indexes kernel to buffering for TCP/IP.
     - Recommend:
         ```nginx
             net.ipv4.ip_local_port_range='1024 65000'
