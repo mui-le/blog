@@ -35,8 +35,8 @@
     - In order to support range query, It has the pointer between the leaf (instead of the conventional from parent to children).
 
 - Order for add index is very important!
-- ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
-- Example:
+    - ~~you can see above that the pointer of the leaf has order from left to right. So your index was correspond~~
+    - Example:
     ```sql
     SELECT name, gender Quang FROM dig WHERE name = 'Diep' AND age = '30' AND language = 'japan' 
     ```
