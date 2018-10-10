@@ -28,7 +28,7 @@
 #### Mysql query tuning
 - How to add indices is good?
 - Mysql use B-Tree to save index (Storage engine is InnoDB)
-- ![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
+![Mysql_B-Tree](https://github.com/mui-le/blog/blob/master/mysql_b_tree.jpg)
 - If you don't know, you only know the point below:
     - It's tree
     - It's support range query
@@ -48,11 +48,11 @@
     ```sql
         SELECT name, bar FROM dig WHERE name = 'Diep' AND language = 'vietnam' AND age = '30'
     ```
-    ~~Mysql will don't know need reorder query and use `idx_name_age_language` to find. So you will need re-init index alert:
+    ~~Mysql will don't know need reorder query and use `idx_name_age_language` to find. So you will need re-init index alert~~:
     ```sql
         ALTER TABLE dig ADD INDEX idx_name_language_age(name, language, age)
     ```
-* Note: the knowledge above is no longer true because mysql has support for now [index-condition-pushdown-optimization](https://dev.mysql.com/doc/refman/5.6/en/index-condition-pushdown-optimization.html)
+* **Note: the knowledge above is no longer true because mysql has support for now** [index-condition-pushdown-optimization](https://dev.mysql.com/doc/refman/5.6/en/index-condition-pushdown-optimization.html)
 - Order of index will most likely be affected by the command `LIKE`. You can reference [multiple-column-indexes](https://dev.mysql.com/doc/refman/5.7/en/multiple-column-indexes.html)
     - Consider the two indexes:
     ```sql
@@ -202,14 +202,11 @@
 
 #### Advance nginx
 - use keepalive: keep alive is a technique of http to `keep` connection TCP even HTTP connection session is over, in order to reuse next request. This Technique very helpful when an use have a lot request to get static resource
-- ![keepalive](https://github.com/mui-le/blog/blob/master/nginx_advance.jpg)
+![keepalive](https://github.com/mui-le/blog/blob/master/nginx_advance.jpg)
 - add directive keepalive to upstream section
     ```
     upstream app {
         server 127.0.0.1:5000;
         keepalive 16;
     }
-
-    
-
-
+    ```
